@@ -1,4 +1,7 @@
 {
+  "name": "@scriptpilot/vueuse",
+  "version": "1.0.0",
+  "main": "source/frontend/composables/index.js",
   "dependencies": {
     "framework7": "^7.1.1",
     "framework7-vue": "^7.1.1",
@@ -19,6 +22,7 @@
   },
   "scripts": {
     "dev": "docker compose up --build -d && npx vite",
-    "reset": "docker rm -v -f mysql"
+    "reset": "docker rm -v -f mysql",
+    "publish": "npx eslint source --fix && npm version minor && npm publish"
   }  
 }

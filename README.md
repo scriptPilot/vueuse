@@ -19,3 +19,4 @@ In addition to [VueUse.org](https://vueuse.org/).
 ## CLI Commands
 
 `npm run dev dev` to start the Demo App
+`npm run publish` to publish a new version to NPM
