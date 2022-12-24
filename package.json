@@ -21,7 +21,7 @@
     "vite": "^4.0.3"
   },
   "scripts": {
-    "deploy": "npx eslint source --fix && npm version minor && git push && npm publish --access=public",
+    "deploy": "npx eslint source --fix && npm version minor && git push --follow-tags && npm publish --access=public",
     "dev": "docker compose up --build -d && npx vite",
     "reset": "docker rm -v -f mysql"
   }
