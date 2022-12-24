@@ -22,7 +22,7 @@
   },
   "scripts": {
     "dev": "docker compose up --build -d && npx vite",
-    "release": "npx eslint source --fix && npm version minor && npm publish --access=public",
+    "release": "npx eslint source --fix && npm version minor && git push && npm publish --access=public",
     "reset": "docker rm -v -f mysql"
   }
 }
