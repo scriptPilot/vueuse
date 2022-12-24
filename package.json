@@ -1,6 +1,6 @@
 {
   "name": "@scriptpilot/vueuse",
-  "version": "1.24.0",
+  "version": "1.25.0",
   "main": "source/frontend/composables/index.js",
   "dependencies": {
     "framework7": "^7.1.1",
