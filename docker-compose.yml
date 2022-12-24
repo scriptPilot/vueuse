@@ -1,0 +1,32 @@
+services:
+
+  php:
+    build: .
+    container_name: php
+    volumes:
+      - ./source/backend:/var/www/html
+    ports:
+      - 8000:80
+    depends_on:
+      - mysql
+
+  phpmyadmin:
+    image: phpmyadmin:5.1.1-apache
+    container_name: phpmyadmin
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=0
+      - PMA_HOST=mysql
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mariadb:10.5.18
+    container_name: mysql
+    command: "mysqld --init-file /data/application/init.sql"
+    restart: always
+    volumes:
+      - ./source/database/structure.sql:/data/application/init.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
