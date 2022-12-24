@@ -1,12 +1,20 @@
 {
   "dependencies": {
-    "@vitejs/plugin-vue": "^4.0.0",
-    "camel-case": "^4.1.2",
     "framework7": "^7.1.1",
     "framework7-vue": "^7.1.1",
+    "vue": "^3.2.45"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "camel-case": "^4.1.2",
+    "eslint": "^8.30.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.6.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-vue": "^9.8.0",
     "unplugin-auto-import": "^0.12.1",
     "unplugin-vue-components": "^0.22.12",
-    "vite": "^4.0.3",
-    "vue": "^3.2.45"
+    "vite": "^4.0.3"
   }
 }
