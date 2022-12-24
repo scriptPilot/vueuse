@@ -23,6 +23,6 @@
   "scripts": {
     "dev": "docker compose up --build -d && npx vite",
     "reset": "docker rm -v -f mysql",
-    "publish": "npx eslint source --fix && npm version minor && npm publish"
+    "publish": "npx eslint source --fix && npm version minor && npm publish --access=public"
   }
 }
