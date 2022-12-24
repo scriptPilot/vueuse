@@ -18,4 +18,4 @@ In addition to [VueUse.org](https://vueuse.org/).
 
 ## CLI Commands
 
-`npm run dev dev` to start the backend and frontend development server
+`npm run dev dev` to start the Demo App

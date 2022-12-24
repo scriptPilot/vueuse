@@ -1,8 +1,13 @@
-import HomePage from './components/pages/HomePage.vue'
+import OverviewPage from './components/pages/Overview.vue'
+import HelloWorldPage from './components/pages/HelloWorld.vue'
 
 export default [
   {
     path: '/',
-    component: HomePage
+    component: OverviewPage
+  },
+  {
+    path: '/helloWorld/',
+    component: HelloWorldPage
   }
 ]
