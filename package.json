@@ -1,6 +1,6 @@
 {
   "name": "@scriptpilot/vueuse",
-  "version": "1.28.0",
+  "version": "1.28.1",
   "main": "source/frontend/composables/index.js",
   "dependencies": {
     "framework7": "^7.1.1",
@@ -22,7 +22,7 @@
   },
   "scripts": {
     "dev": "docker compose up --build -d && npx vite",
-    "build": "npx eslint source --fix && npm version patch",    
+    "build": "npx eslint source --fix && npm version patch",
     "deploy": "git push --follow-tags && npm publish --access=public"
   }
 }
