@@ -23,7 +23,7 @@
   },
   "scripts": {
     "dev": "docker compose up --build -d && npx vite",
-    "build": "npx eslint source --fix && npm version patch",
+    "build": "npx eslint source --fix && npm version minor",
     "deploy": "git push --follow-tags && npm publish --access=public"
   }
 }
