@@ -1,7 +1,9 @@
-import { useCollection } from './collection'
-import { useHelloWorld } from './helloWorld'
+import { useCollection } from './Collection'
+import { useHelloWorld } from './HelloWorld'
+import { useMySQLAPI } from './MySQLAPI'
 
 export {
   useCollection,
-  useHelloWorld
+  useHelloWorld,
+  useMySQLAPI
 }

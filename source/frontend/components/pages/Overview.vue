@@ -8,6 +8,7 @@
     <f7-list>
       <f7-list-item title="Hello World" link="/helloWorld/"></f7-list-item>
       <f7-list-item title="Collection" link="/collection/"></f7-list-item>
+      <f7-list-item title="MySQL API" link="/mysqlapi/"></f7-list-item>
     </f7-list>
   </f7-page>
 </template>

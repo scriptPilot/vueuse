@@ -3,6 +3,8 @@
   Options: localStorageKey (string, optional) to make the collection persistent
   Getters: documents
   Methods: addDoc(doc), updateDoc(doc, updates), removeDoc(doc)
+
+  If no "$id" or "id" key is provided, an "$id" key is added automatically (UUID v4).
 */
 
 import { reactive, readonly } from 'vue'
@@ -35,21 +37,29 @@ export function useCollection (options) {
   }
 
   function addDoc (doc) {
-    if (!doc.$id) doc.$id = uuid()
+    if (doc.$id === undefined && doc.id === undefined) {
+      doc.$id = uuid()
+    }
     docs.push(doc)
     writeToLocalStorage()
   }
 
   function updateDoc (doc, updates) {
     for (let n = 0; n < docs.length; n++) {
-      if (docs[n].$id === doc.$id) docs.splice(n, 1, { ...doc, ...updates })
+      if ((docs[n].$id === doc.$id && doc.$id !== undefined) ||
+       (docs[n].id === doc.id && doc.id !== undefined)) {
+        docs.splice(n, 1, { ...doc, ...updates })
+      }
     }
     writeToLocalStorage()
   }
 
   function removeDoc (doc) {
     for (let n = 0; n < docs.length; n++) {
-      if (docs[n].$id === doc.$id) docs.splice(n, 1)
+      if ((docs[n].$id === doc.$id && doc.$id !== undefined) ||
+       (docs[n].id === doc.id && doc.id !== undefined)) {
+        docs.splice(n, 1)
+      }
     }
     writeToLocalStorage()
   }

@@ -10,6 +10,7 @@
         :title="doc.title"
         :badge="doc.badge"
         @click="updateDoc(doc, { badge: doc.badge + 1 })"
+        :key="doc.$id"
       >
         <f7-button color="red" @click="removeDoc(doc)">Delete</f7-button>
       </f7-list-item>
