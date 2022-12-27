@@ -24,7 +24,7 @@ export default {
         {
           'framework7-vue': [
             'f7',
-            'f7Ready',
+            'f7ready',
             'f7route',
             'f7router'
           ]
