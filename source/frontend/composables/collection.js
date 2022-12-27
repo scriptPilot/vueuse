@@ -64,7 +64,7 @@ export function useCollection (options) {
     writeToLocalStorage()
   }
 
-  function set (newDocs) {
+  function setDocs (newDocs) {
     docs.splice(0, docs.length, [...newDocs])
   }
 
@@ -75,6 +75,6 @@ export function useCollection (options) {
     addDoc,
     updateDoc,
     removeDoc,
-    set
+    setDocs
   }
 }
