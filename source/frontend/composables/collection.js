@@ -65,7 +65,7 @@ export function useCollection (options) {
   }
 
   function setDocs (newDocs) {
-    docs.splice(0, docs.length, [...newDocs])
+    docs.splice(0, docs.length, ...newDocs)
   }
 
   if (localStorageKey) readFromLocalStorage()
