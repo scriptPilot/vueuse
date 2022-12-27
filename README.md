@@ -10,7 +10,7 @@ In addition to [VueUse.org](https://vueuse.org/).
 - Frontend
   - Package Manager: NPM
   - Code Validator: ESLint
-  - Development Sever: Vite
+  - Development Server: Vite
   - JavaScript Framework: Vue
   - UX Framework: Framework7 Vue
 - Backend
