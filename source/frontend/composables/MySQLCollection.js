@@ -7,7 +7,7 @@
     `$updated` bigint(14) NOT NULL,
     `$synchronized` bigint(14) NOT NULL,
     `$deleted` tinyint(1) NOT NULL DEFAULT 0,
-  Options: apiUrl, localStorageKey, syncTable, syncInterval, syncStatus
+  Options: apiUrl, localStorageKey, syncTable, syncFilter, syncInterval, syncStatus
   Getters: documents
   Methods: addDoc(doc), updateDoc(doc, updates), removeDoc(doc), runSync, startSync, stopSync
 */
@@ -17,7 +17,7 @@ import { useMySQLAPI } from './MySQLAPI'
 
 export function useMySQLCollection (options) {
   // Validate options
-  const { apiUrl, localStorageKey, syncTable, syncInterval, syncStatus } = options || {}
+  const { apiUrl, localStorageKey, syncTable, syncFilter, syncInterval, syncStatus } = options || {}
   if (!syncTable) throw new Error('"syncTable" option is missing.')
   // Use Collection
   const collection = useCollection({ localStorageKey })
@@ -47,9 +47,9 @@ export function useMySQLCollection (options) {
         console.log('Sync started')
         // Fetch remote documents for sync to local
         const now = Date.now()
-        const updatedFilter = '?filter1=$updated,gt,' + lastUpdate + '&filter2=$synchronized,gt,' + lastUpdate
+        const updatedFilter = 'filter1=$updated,gt,' + lastUpdate + '&filter2=$synchronized,gt,' + lastUpdate
         const deletedFilter = lastUpdate === 0 ? '&filter=$deleted,eq,0' : ''
-        await api.getCollection(syncTable + updatedFilter + deletedFilter)
+        await api.getCollection(syncTable + '?' + (syncFilter ? syncFilter + '&' : '') + updatedFilter + deletedFilter)
           .then(remoteCollection => {
             // Create object with local updates
             const docUpdates = {}
