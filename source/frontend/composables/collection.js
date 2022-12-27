@@ -2,7 +2,7 @@
   Purpose: Collection Model (collection = array of documents, document = object with properties)
   Options: localStorageKey (string, optional) to make the collection persistent
   Getters: documents
-  Methods: addDoc(doc), updateDoc(doc, updates), removeDoc(doc)
+  Methods: addDoc(doc), updateDoc(doc, updates), removeDoc(doc), setDocs(docs)
 
   If no "$id" or "id" key is provided, an "$id" key is added automatically (UUID v4).
 */
@@ -64,12 +64,17 @@ export function useCollection (options) {
     writeToLocalStorage()
   }
 
+  function set(newDocs) {
+    docs.splice(0, docs.length, [...newDocs])
+  }
+
   if (localStorageKey) readFromLocalStorage()
 
   return {
     documents: readonly(docs),
     addDoc,
     updateDoc,
-    removeDoc
+    removeDoc,
+    set
   }
 }

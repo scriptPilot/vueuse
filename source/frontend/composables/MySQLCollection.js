@@ -40,6 +40,9 @@ export function useMySQLCollection (options) {
   function realRemoveDoc (doc) {
     return collection.removeDoc(doc)
   }
+  function setDocs (docs) {
+    return collection.setDocs(docs)
+  }
   async function runSync () {
     if (isActive) {
       // API is available
@@ -145,6 +148,7 @@ export function useMySQLCollection (options) {
     addDoc,
     updateDoc,
     removeDoc,
+    setDocs,
     runSync,
     startSync,
     stopSync
