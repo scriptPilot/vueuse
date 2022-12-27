@@ -44,7 +44,7 @@ export function useMySQLCollection (options) {
     if (isActive) {
       // API is available
       if (api.isAvailable()) {
-        console.log('Sync started')
+        console.debug('Sync started')
         // Fetch remote documents for sync to local
         const now = Date.now()
         const updatedFilter = 'filter1=$updated,gt,' + lastUpdate + '&filter2=$synchronized,gt,' + lastUpdate
@@ -60,21 +60,21 @@ export function useMySQLCollection (options) {
             remoteCollection.forEach(doc => {
               // Remote document not found locally but deletion flag > skip
               if (!docUpdates[doc.$id || doc.id] && doc.$deleted) {
-                console.log('skipped remote', JSON.stringify(doc))
+                console.debug('skipped remote', JSON.stringify(doc))
               // Remote document not found locally and no deletion flag > create
               } else if (!docUpdates[doc.$id || doc.id] && !doc.$deleted) {
                 const newDoc = { ...doc, $synchronized: Date.now() }
                 addDoc(newDoc)
-                console.log('created local', JSON.stringify(newDoc))
+                console.debug('created local', JSON.stringify(newDoc))
               // Remote update newer than local one but deletion flag > delete
               } else if (doc.$updated > docUpdates[doc.$id || doc.id] && doc.$deleted) {
                 realRemoveDoc(doc)
-                console.log('deleted local', JSON.stringify(doc))
+                console.debug('deleted local', JSON.stringify(doc))
               // Remote update newer than local one > update
               } else if (doc.$updated > docUpdates[doc.$id || doc.id]) {
                 const updatedDoc = { ...doc, $synchronized: Date.now() }
                 updateDoc(doc, updatedDoc)
-                console.log('updated local', JSON.stringify(updatedDoc))
+                console.debug('updated local', JSON.stringify(updatedDoc))
               }
             })
             lastUpdate = now
@@ -88,38 +88,38 @@ export function useMySQLCollection (options) {
             // Try update remote document first
             await api.updateDoc(syncTable, doc.$id || doc.id, remoteDoc)
               .then(() => {
-                console.log('then')
+                console.debug('then')
                 // Remember successful sync
                 updateDoc(doc, { $updated: doc.$updated, $synchronized: Date.now() })
-                console.log('updated remote', JSON.stringify(remoteDoc))
+                console.debug('updated remote', JSON.stringify(remoteDoc))
                 // Delete locally after synchronization
                 if (doc.$deleted) {
                   realRemoveDoc(doc)
-                  console.log('deleted local', JSON.stringify(doc))
+                  console.debug('deleted local', JSON.stringify(doc))
                 }
               })
               // Create remote document if update failed
               .catch(async () => {
                 // Create remote document (if no deletion flag is set)
                 if (!doc.$deleted) {
-                  console.log('createDoc', syncTable, remoteDoc)
+                  console.debug('createDoc', syncTable, remoteDoc)
                   await api.createDoc(syncTable, remoteDoc)
                     .then(() => {
                       // Remember successful sync
                       updateDoc(doc, { $updated: doc.$updated, $synchronized: Date.now() })
-                      console.log('created remote', JSON.stringify(remoteDoc))
+                      console.debug('created remote', JSON.stringify(remoteDoc))
                     })
                 } else {
                   // Delete doc locally
                   realRemoveDoc(doc)
-                  console.log('deleted local', JSON.stringify(doc))
+                  console.debug('deleted local', JSON.stringify(doc))
                 }
               })
           }
         }
       // API not available
       } else {
-        console.log('Sync skipped, API not available')
+        console.debug('Sync skipped, API not available')
       }
       setTimeout(() => {
         runSync()
@@ -129,13 +129,13 @@ export function useMySQLCollection (options) {
 
   function startSync () {
     isActive = true
-    console.log('Sync activated')
+    console.debug('Sync activated')
     runSync()
   }
 
   function stopSync () {
     isActive = false
-    console.log('Sync deactivated')
+    console.debug('Sync deactivated')
   }
 
   if (isActive) runSync()

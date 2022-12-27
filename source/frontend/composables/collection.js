@@ -19,7 +19,7 @@ export function useCollection (options) {
   function writeToLocalStorage () {
     if (localStorageKey) {
       window.localStorage.setItem(localStorageKey, JSON.stringify(docs))
-      console.log('Write to LocalStorage')
+      console.debug('Write to LocalStorage')
     }
   }
 
@@ -30,7 +30,7 @@ export function useCollection (options) {
         const localStorageJson = JSON.parse(localStorageValue)
         if (Array.isArray(localStorageJson)) {
           localStorageJson.forEach(object => docs.push(object))
-          console.log('Read from LocalStorage')
+          console.debug('Read from LocalStorage')
         }
       } catch {}
     }

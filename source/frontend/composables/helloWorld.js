@@ -1,3 +1,3 @@
 export function useHelloWorld () {
-  console.log('Hello World')
+  console.debug('Hello World')
 }
