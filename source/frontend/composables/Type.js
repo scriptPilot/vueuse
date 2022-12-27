@@ -4,8 +4,8 @@
 
 */
 
-export function useType(value) {
-  if (typeof value === null) return 'null'
+export function useType (value) {
+  if (value === null) return 'null'
   else if (Array.isArray(value)) return 'array'
   else if (typeof value === 'object') return 'object'
   else if (typeof value === 'string') return 'string'

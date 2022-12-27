@@ -5,6 +5,7 @@
 */
 
 import { useType } from './Type'
+import { reactive, ref, watch } from 'vue'
 
 function readFromLocalStorage (localStorageKey) {
   try {
@@ -20,8 +21,7 @@ function writeToLocalStorage (localStorageKey, value) {
   window.localStorage.setItem(localStorageKey, JSON.stringify(value))
 }
 
-export function useLocalStorage(localStorageKey, defaults = undefined) {
-
+export function useLocalStorage (localStorageKey, defaults = undefined) {
   let value
 
   const localStorageValue = readFromLocalStorage(localStorageKey)
@@ -35,8 +35,8 @@ export function useLocalStorage(localStorageKey, defaults = undefined) {
   } else if (defaults !== undefined) {
     if (useType(defaults) === useType(localStorageValue)) {
       value = useType(localStorageValue) === 'array'
-            ? reactive(localStorageValue)
-            : ref(localStorageValue)
+        ? reactive(localStorageValue)
+        : ref(localStorageValue)
     } else {
       value = useType(defaults) === 'array' ? reactive(defaults) : ref(defaults)
     }
