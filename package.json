@@ -19,7 +19,7 @@
     "framework7-vue": "^7.1.1",
     "unplugin-auto-import": "^0.12.1",
     "unplugin-vue-components": "^0.22.12",
-    "vite": "^4.0.3",
+    "vite": "^4.0.3"
   },
   "scripts": {
     "dev": "docker compose up --build -d && npx vite",
