@@ -17,6 +17,21 @@ In addition to [VueUse.org](https://vueuse.org/).
   - PHP + MySQL Server: Docker
   - MySQL CRUD API: PHP
 
+## Setup
+
+- Clone this respository
+- Install dependencies with `npm installl`
+- Create a OAuth Client ID in the Google Cloud Console
+  - JavaScript source / forwarding URL: http://127.0.0.1:517
+  - Create file /source/frontend/credentials.json
+
+    ```
+    {
+      "clientId": "<your-google-client-id>",
+      "clientSecret": "<your-google-client-secret>"
+    }
+    ```
+
 ## CLI Commands
 
 - `npm run dev` to start the Demo App

@@ -1,10 +1,10 @@
-import { useLocalStorage } from './LocalStorage'
+import { useLocalStorage } from './localStorage'
 import { useCollection } from './Collection'
 import { useHelloWorld } from './HelloWorld'
 import { useMySQLAPI } from './MySQLAPI'
 import { useMySQLCollection } from './MySQLCollection'
 import { useType } from './Type'
-import { useGoogleSignin } from './googleSignin'
+import { useGoogleAuth } from './googleAuth'
 
 export {
   useLocalStorage,
@@ -13,5 +13,5 @@ export {
   useMySQLAPI,
   useMySQLCollection,
   useType,
-  useGoogleSignin
+  useGoogleAuth
 }

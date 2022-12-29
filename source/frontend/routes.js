@@ -4,10 +4,21 @@ import CollectionPage from './components/pages/Collection.vue'
 import HelloWorldPage from './components/pages/HelloWorld.vue'
 import MySQLAPIPage from './components/pages/MySQLAPI.vue'
 import MySQLCollectionPage from './components/pages/MySQLCollection.vue'
+import GoogleAuthPage from './components/pages/GoogleAuth.vue'
 
 export default [
   {
     path: '/',
+    redirect: ({ resolve, to }) => {
+      if (to.query.code) {
+        resolve('/googleAuth/')
+      } else {
+        resolve('/overview/')
+      }
+    }
+  },
+  {
+    path: '/overview/',
     component: OverviewPage
   },
   {
@@ -29,5 +40,9 @@ export default [
   {
     path: '/mysqlCollection/',
     component: MySQLCollectionPage
+  },
+  {
+    path: '/googleAuth/',
+    component: GoogleAuthPage
   }
 ]

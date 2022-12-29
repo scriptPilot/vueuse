@@ -18,10 +18,14 @@ function readFromLocalStorage (localStorageKey) {
 }
 
 function writeToLocalStorage (localStorageKey, value) {
-  window.localStorage.setItem(localStorageKey, JSON.stringify(value))
+  if (value === undefined || value === null) {
+    window.localStorage.removeItem(localStorageKey)
+  } else {
+    window.localStorage.setItem(localStorageKey, JSON.stringify(value))
+  }
 }
 
-export function useLocalStorage (localStorageKey, defaults = undefined) {
+export function useLocalStorage (localStorageKey, defaults = null) {
   let value
 
   const localStorageValue = readFromLocalStorage(localStorageKey)
@@ -32,7 +36,7 @@ export function useLocalStorage (localStorageKey, defaults = undefined) {
     } else {
       value = reactive(defaults)
     }
-  } else if (defaults !== undefined) {
+  } else if (defaults !== null) {
     if (useType(defaults) === useType(localStorageValue)) {
       value = useType(localStorageValue) === 'array'
         ? reactive(localStorageValue)
