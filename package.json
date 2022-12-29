@@ -3,7 +3,8 @@
   "version": "1.38.0",
   "main": "source/frontend/composables/index.js",
   "dependencies": {
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "vue": "^3.2.45"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
@@ -19,7 +20,6 @@
     "unplugin-auto-import": "^0.12.1",
     "unplugin-vue-components": "^0.22.12",
     "vite": "^4.0.3",
-    "vue": "^3.2.45"
   },
   "scripts": {
     "dev": "docker compose up --build -d && npx vite",
