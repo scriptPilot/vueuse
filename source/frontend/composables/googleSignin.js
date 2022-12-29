@@ -4,6 +4,25 @@
   Getters: token
   Methods: signin
 
+  Usage:
+
+    Create first a OAuth 2.0-Client-ID in the Google Developer Console
+
+    --- App.vue ---
+
+    <template>
+      <button @click="signin">Signin</button>
+      <p>Token: {{ token }}</p>
+    </template>
+
+    <script setup>
+      import { useGoogleSignin } from '@scriptpilot/vueuse'
+      const clientId = 'xxx'
+      const redirectUrl = 'http://127.0.0.1:5173'
+      const scope = 'https://www.googleapis.com/auth/drive.metadata.readonly'
+      const { signin, token } = useGoogleSignin({ clientId, redirectUrl, scope })      
+    </script>
+
 */
 
 import { ref } from 'vue'
