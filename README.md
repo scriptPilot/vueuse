@@ -72,8 +72,8 @@ Manage collections easily.
 
 ````js
 // Options
-localStorageKey = null        // Local Storage key to make the collection persistent, optional
-primaryKey = '$key'           // Primary key which is used by all documents of the collection
+localStorageKey               // Local Storage key to make the collection persistent, optional
+primaryKey                    // Primary key used by all documents, default is $key
 
 // Methods
 addDoc({ doc })               // Add new document, key is created as UUID v4 if not provided
@@ -91,7 +91,7 @@ MySQL API Wrapper for the [PHP CRUD API](https://github.com/mevdschee/php-crud-a
 
 ````js
 // Options
-apiUrl                               // API endpoint, backend/api.php file by default 
+apiUrl                               // API endpoint, /api.php file by default 
 
 // Methods
 isAvailable()                        // Returns true if API is available or false if not
@@ -99,8 +99,35 @@ apiRequest({ path, method, data })   // Returns promise, resolves with JSON resp
 createDoc({ table, doc })            // Returns promise, resolves with record key
 updateDoc({ table, key, updates })   // Returns promise, resolves with record key
 deleteDoc({ table, key })            // Returns promise, resolves with record key
-getDoc({ table, key })               // Returns promise, resolves with document
-getCollection({ path })              // Returns promise, reoslves with documents array
+getDoc({ table, key })               // Returns promise, resolves with record
+getCollection({ path })              // Returns promise, reoslves with record array
+````
+
+### MySQLCollection
+
+Collection with automatic synchronization with the [PHP CRUD API](https://github.com/mevdschee/php-crud-api).
+
+````js
+// Options
+localStorageKey               // Local Storage key to make the collection persistent, optional
+primaryKey                    // Primary key used by all documents, default is $key
+apiUrl                        // API endpoint, /api.php file by default 
+syncTable                     // Table name for the PHP CRUD API
+syncFilter                    // Filter options for the PHP CRUD API, optional
+syncInterval                  // Sync interval in milliseconds, 1.000 by default
+syncStatus                    // Sync status, true by default
+
+// Methods
+addDoc({ doc })               // Add new document, key is created as UUID v4 if not provided
+updateDoc({ key, updates })   // Apply the updates to the documemt with the given key 
+removeDoc({ key })            // Remove the document with the given key
+setDocs({ docs })             // Replace all documents, create keys if not provided
+runSync()                     // Run sync manually
+startSync()                   // Start automatic synchronization
+stopSync()                    // Stop automatic synchronization
+
+// State
+documents                     // Read-only reactive array with all documents of the collection
 ````
 
 ## Demo App
