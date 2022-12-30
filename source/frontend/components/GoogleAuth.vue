@@ -10,7 +10,8 @@
 </template>
 <script setup>
   import { useGoogleAuth } from '../composables'
-  import { clientId, clientSecret } from '../credentials.json'
+  import credentials from '../credentials'
+  const { googleClientId: clientId, googleClientSecret: clientSecret } = credentials
   const scope = 'https://www.googleapis.com/auth/drive'
   const { token, signIn, signOut } = useGoogleAuth({ clientId, clientSecret, scope })
 </script>
