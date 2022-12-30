@@ -28,7 +28,7 @@ console.log(composable.state.value)
 - Each composable can return methods and reactive state objects
 - Each method can accept an object with options as well
 
-Objects are used to make the composables and functions parameters more explicit, flexible and allow backward-compatibility if new parameters are added in the future.
+Objects are used to make the composables and functions parameters more explicit, flexible and to allow backward-compatibility if new parameters are added in the future.
 
 ## Composables
 
