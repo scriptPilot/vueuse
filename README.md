@@ -37,6 +37,13 @@ method({ option: 'value' })
 
 ### HelloWorld
 
+Methods
+
+````js
+greet({ name })     // Log "Hello {name}" to the console
+````
+
+
 ````js
 const {
   // Logs "Hello {name}" to the console
@@ -45,6 +52,25 @@ const {
 ````
 
 ### Collection
+
+Options
+
+````js
+localStorageKey    // 
+````
+
+Methods
+
+````js
+addDoc({ doc })        // sdajkljasd
+updateDoc({ doc })     // sadjklasjd
+````
+
+State
+
+````js
+documents     // 
+````
 
 ````js
 const {
@@ -60,7 +86,7 @@ const {
 
 ## Demo App
 
-To test the composables locally:
+To test the composables locally and review code samples:
 
 1. Install Docker and Node.js
 2. Clone this repository and run `npm install`
