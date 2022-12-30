@@ -24,10 +24,7 @@ Objects are used to make the composables and functions parameters more explicit,
 
 ````js
 // Destructured syntax
-const { state, method } = useComposable({ option })
-
-// Initialize a composable
-useComposable({ option: 'value' })
+const { state, method } = useComposable({ option: value })
 
 // Use a state
 console.log(state.value)
