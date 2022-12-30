@@ -23,7 +23,7 @@ Every composable can accept an object with parameters and can return readonly st
 Objects are used to make the composables and functions parameters more explicit, flexible and allow backward-compatibility if new parameters are added in the future.
 
 ````js
-// Destructured syntax
+// Use an option
 const { state, method } = useComposable({ option: value })
 
 // Use a state
@@ -56,20 +56,20 @@ const {
 Options
 
 ````js
-localStorageKey    // 
+localStorageKey      // asdjkalsdj
 ````
 
 Methods
 
 ````js
-addDoc({ doc })        // sdajkljasd
-updateDoc({ doc })     // sadjklasjd
+addDoc({ doc })      // sdajkljasd
+updateDoc({ doc })   // sadjklasjd
 ````
 
 State
 
 ````js
-documents     // 
+documents            // sdadasd
 ````
 
 ````js
