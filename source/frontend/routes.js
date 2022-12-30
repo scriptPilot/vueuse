@@ -1,10 +1,11 @@
-import OverviewPage from './components/pages/Overview.vue'
-import LocalStoragePage from './components/pages/LocalStorage.vue'
-import CollectionPage from './components/pages/Collection.vue'
-import HelloWorldPage from './components/pages/HelloWorld.vue'
-import MySQLAPIPage from './components/pages/MySQLAPI.vue'
-import MySQLCollectionPage from './components/pages/MySQLCollection.vue'
-import GoogleAuthPage from './components/pages/GoogleAuth.vue'
+import IndexPage from './components/Index.vue'
+import CollectionPage from './components/Collection.vue'
+import GoogleAuthPage from './components/GoogleAuth.vue'
+import HelloWorldPage from './components/HelloWorld.vue'
+import LocalStoragePage from './components/LocalStorage.vue'
+import MySQLAPIPage from './components/MySQLAPI.vue'
+import MySQLCollectionPage from './components/MySQLCollection.vue'
+import TypePage from './components/Type.vue'
 
 export default [
   {
@@ -13,25 +14,29 @@ export default [
       if (to.query.code) {
         resolve('/googleAuth/')
       } else {
-        resolve('/overview/')
+        resolve('/index/')
       }
     }
   },
   {
-    path: '/overview/',
-    component: OverviewPage
-  },
-  {
-    path: '/localStorage/',
-    component: LocalStoragePage
+    path: '/index/',
+    component: IndexPage
   },
   {
     path: '/collection/',
     component: CollectionPage
   },
   {
+    path: '/googleAuth/',
+    component: GoogleAuthPage
+  },
+  {
     path: '/helloWorld/',
     component: HelloWorldPage
+  },
+  {
+    path: '/localStorage/',
+    component: LocalStoragePage
   },
   {
     path: '/mysqlapi/',
@@ -42,7 +47,7 @@ export default [
     component: MySQLCollectionPage
   },
   {
-    path: '/googleAuth/',
-    component: GoogleAuthPage
+    path: '/type/',
+    component: TypePage
   }
 ]

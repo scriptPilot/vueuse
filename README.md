@@ -1,39 +1,83 @@
 # Vue Use
 
-Collection of [Vue Composables](https://vuejs.org/guide/reusability/composables.html).
+Collection of [Vue Composables](https://vuejs.org/guide/reusability/composables.html) in addition to [VueUse.org](https://vueuse.org/).
 
-In addition to [VueUse.org](https://vueuse.org/).
+## Installation
 
-## Tech Stack
+````
+npm i -D @scriptpilot/vueuse
+````
 
-- Git Repository: GitHub
-- Frontend
-  - Package Manager: NPM
-  - Code Validator: ESLint
-  - Development Server: Vite
-  - JavaScript Framework: Vue
-  - UX Framework: Framework7 Vue
-- Backend
-  - PHP + MySQL Server: Docker
-  - MySQL CRUD API: PHP
+## Usage
 
-## Setup
+````js
+// Import to the application store or to any component
+import { useComposable } from '@scriptpilot/vueuse'
 
-- Clone this respository
-- Install dependencies with `npm installl`
-- Create a OAuth Client ID in the Google Cloud Console
-  - JavaScript source / forwarding URL: http://127.0.0.1:517
-  - Create file /source/frontend/credentials.json
+// Initalize the composable
+const composable = useComposable()
+````
 
-    ```
-    {
-      "clientId": "<your-google-client-id>",
-      "clientSecret": "<your-google-client-secret>"
-    }
-    ```
+Every composable can accept an object with parameters and can return readonly states and methods, which can accept an object with parameters itself.
 
-## CLI Commands
+Objects are used to make the composables and functions parameters more explicit, flexible and allow backward-compatibility if new parameters are added in the future.
 
-- `npm run dev` to start the Demo App
-- `npm run build` to build the Demo App
-- `npm run deploy` to deploy to GitHub and NPM
+````js
+// Destructured syntax
+const { state, method } = useComposable({ option })
+
+// Initialize a composable
+useComposable({ option: 'value' })
+
+// Use a state
+console.log(state.value)
+
+// Use a method
+method({ option: 'value' })
+````
+
+## Composables
+
+### HelloWorld
+
+````js
+const {
+  // Logs "Hello {name}" to the console
+  greet({ name })
+} = useHelloWorld()
+````
+
+#### Example
+
+````js
+// Logs "Hello Nobody" to the console
+greet({ name: 'Nobody' })
+````
+
+### Collection
+
+````js
+const {
+  documents,
+  addDoc({ doc }),
+  updateDoc({ doc, updates }),
+  removeDoc({ doc }),
+  setDocs({ docs })
+} = useCollection({
+  localStorageKey
+})
+````
+
+## Demo App
+
+To test the composables locally:
+
+1. Install Docker and Node.js
+2. Clone this repository and run `npm install`
+4. Run `npm run dev` to start the Demo App
+
+To use the Google-related composables:
+
+1. Create a Google Cloud project 
+2. Activate the Drive API and create an OAuth client
+3. Modify and save the credentials.template.js file as credentials.js

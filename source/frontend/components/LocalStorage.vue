@@ -25,7 +25,7 @@
   </f7-page>
 </template>
 <script setup>
-  import { useLocalStorage } from '../../composables'
+  import { useLocalStorage } from '../composables'
   const toggle = useLocalStorage('toggle', false)
   const text = useLocalStorage('text', 'Initial text')
   const boxes = useLocalStorage('boxes', { first: true, second: false, third: true })

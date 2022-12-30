@@ -1,3 +1,11 @@
 export function useHelloWorld () {
-  console.debug('Hello World')
+
+  function greet({ name = 'User' }) {
+    console.log(`Hello ${name}`)    
+  }
+
+  return {
+    greet
+  }
+
 }

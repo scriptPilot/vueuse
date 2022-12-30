@@ -1,4 +1,4 @@
-import { useLocalStorage } from './localStorage'
+import { useLocalStorage } from './LocalStorage'
 
 export function useGoogleAuth({ clientId, clientSecret, redirectUrl, scope }) {
   

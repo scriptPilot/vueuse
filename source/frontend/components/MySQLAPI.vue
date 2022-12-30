@@ -21,7 +21,7 @@
   </f7-page>
 </template>
 <script setup>
-  import { useMySQLAPI, useCollection } from '../../composables'
+  import { useMySQLAPI, useCollection } from '../composables'
 
   const apiUrl = import.meta.env.DEV ? 'http://localhost:8000/api.php' : '/api.php'
   const api = useMySQLAPI(apiUrl)

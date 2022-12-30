@@ -22,7 +22,7 @@
     "vite": "^4.0.3"
   },
   "scripts": {
-    "dev": "docker compose up --build -d && npx vite",
+    "dev": "docker compose up --build -d && npx vite --open",
     "build": "npx eslint source --fix && npm version minor",
     "deploy": "git push --follow-tags && npm publish --access=public"
   }
