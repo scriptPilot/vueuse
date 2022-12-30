@@ -41,6 +41,31 @@ Greet the world.
 greet({ name = 'User' })   // Log "Hello {name}" to the console or "Hello User" by default
 ````
 
+### Type
+
+Identify the type of anything.
+
+````js
+// Methods
+getType({ value })   // Returns the type of the given value as a string
+````
+
+### LocalStorage
+
+Create a persistent reactive state.
+
+````js
+// Options
+localStorageKey       // Local Storage key to make the state persistent
+defaultValue = null   // Default value, for objects, it will be merged with the local storage
+
+// State
+state                 // Read/Writable reactive state
+
+// Methods
+reset                 // Reset value to the default value
+````
+
 ### Collection
 
 Manage collections easily.
@@ -51,7 +76,7 @@ localStorageKey = null        // Local Storage key to make the collection persis
 primaryKey = '$key'           // Primary key which is used by all documents of the collection
 
 // State
-documents                     // Reactive array with all documents of the collection
+documents                     // Read-only reactive array with all documents of the collection
 
 // Methods
 addDoc({ doc })               // Add new document, key is created as UUID v4 if not provided
