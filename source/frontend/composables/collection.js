@@ -1,18 +1,7 @@
-/*
-  Purpose: Collection Model (collection = array of documents, document = object with properties)
-  Options: localStorageKey (string, optional) to make the collection persistent
-  Getters: documents
-  Methods: addDoc(doc), updateDoc(doc, updates), removeDoc(doc), setDocs(docs)
-
-  If no "$id" or "id" key is provided, an "$id" key is added automatically (UUID v4).
-*/
-
 import { reactive, readonly } from 'vue'
 import { v4 as uuid } from 'uuid'
 
-export function useCollection (options) {
-  let { localStorageKey } = options || {}
-  localStorageKey = typeof localStorageKey === 'string' ? localStorageKey : null
+export function useCollection ({ localStorageKey = null, primaryKey = '$key' }) {
 
   const docs = reactive([])
 
@@ -36,35 +25,34 @@ export function useCollection (options) {
     }
   }
 
-  function addDoc (doc) {
-    if (doc.$id === undefined && doc.id === undefined) {
-      doc.$id = uuid()
-    }
-    docs.push(doc)
+  function addDoc ({ doc }) {
+    if (!doc[primaryKey]) doc[primaryKey] = uuid()
+    docs.push({ ...doc })
     writeToLocalStorage()
   }
 
-  function updateDoc (doc, updates) {
+  function updateDoc ({ key, updates }) {
     for (let n = 0; n < docs.length; n++) {
-      if ((docs[n].$id === doc.$id && doc.$id !== undefined) ||
-       (docs[n].id === doc.id && doc.id !== undefined)) {
-        docs.splice(n, 1, { ...doc, ...updates })
+      if (docs[n][primaryKey] === key) {
+        docs.splice(n, 1, { ...docs[n], ...updates })
       }
     }
     writeToLocalStorage()
   }
 
-  function removeDoc (doc) {
+  function removeDoc ({ key }) {
     for (let n = 0; n < docs.length; n++) {
-      if ((docs[n].$id === doc.$id && doc.$id !== undefined) ||
-       (docs[n].id === doc.id && doc.id !== undefined)) {
+      if (docs[n][primaryKey] === key) {
         docs.splice(n, 1)
       }
     }
     writeToLocalStorage()
   }
 
-  function setDocs (newDocs) {
+  function setDocs ({ docs: newDocs }) {
+    for (let n = 0; n < newDocs.length; n++) {
+      if (!newDocs[n][primaryKey]) newDocs[n][primaryKey] = uuid()
+    }
     docs.splice(0, docs.length, ...newDocs)
     writeToLocalStorage()
   }

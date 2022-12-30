@@ -15,104 +15,49 @@ npm i -D @scriptpilot/vueuse
 import { useComposable } from '@scriptpilot/vueuse'
 
 // Initalize the composable
-const composable = useComposable()
-````
-
-Every composable can accept an object with parameters and can return readonly states and methods, which can accept an object with parameters itself.
-
-Objects are used to make the composables and functions parameters more explicit, flexible and allow backward-compatibility if new parameters are added in the future.
-
-````js
-// Use an option
-const { state, method } = useComposable({ option: value })
-
-// Use a state
-console.log(state.value)
+const composable = useComposable({ ...options })
 
 // Use a method
-method({ option: 'value' })
+composable.method({ ...options })
+
+// Use a state
+console.log(composable.state.value)
 ````
+
+- Each composable can accept an object with options.
+- Each composable can return reactive state objects and methods
+- Each method can accept an object with options as well
+
+Objects are used to make the composables and functions parameters more explicit, flexible and allow backward-compatibility if new parameters are added in the future.
 
 ## Composables
 
 ### HelloWorld
 
-Methods
+Greet the world.
 
 ````js
-greet({ name })     // Log "Hello {name}" to the console
-````
-
-
-````js
-const {
-  // Logs "Hello {name}" to the console
-  greet({ name })
-} = useHelloWorld()
-````
-
-### Collection
-
-````js
-const {
-  documents,            // sdadasd
-  addDoc({ doc }),      // sdajkljasd
-  updateDoc({ doc })    // sadjklasjd
-} = useCollection({
-  localStorageKey       // asdjkalsdj
-})
-
 // Methods
-
-// State
-
+greet({ name = 'User' })   // Log "Hello {name}" to the console
 ````
 
 ### Collection
+
+Manage collections easily.
 
 ````js
 // Options
-localStorageKey      // asdjkalsdj
-
-// Methods
-addDoc({ doc })      // sdajkljasd
-updateDoc({ doc })   // sadjklasjd
+localStorageKey = null        // Local Storage key to make the collection persistent
+primaryKey = '$id'            // Primary key which is used by all documents of the collection
 
 // State
-documents            // sdadasd
-````
+documents                     // Reactive array with all documents of the collection
 
-### Collection
-
-Options
-
-````js
-localStorageKey      // asdjkalsdj
-````
-
-Methods
-
-````js
-addDoc({ doc })      // sdajkljasd
-updateDoc({ doc })   // sadjklasjd
-````
-
-State
-
-````js
-documents            // sdadasd
-````
-
-````js
-const {
-  documents,
-  addDoc({ doc }),
-  updateDoc({ doc, updates }),
-  removeDoc({ doc }),
-  setDocs({ docs })
-} = useCollection({
-  localStorageKey
-})
+// Methods
+addDoc({ doc })               // Add new document, key is created as UUID v4 if not provided
+updateDoc({ key, updates })   // Apply the updates to the documemt with the given key 
+removeDoc({ key })            // Remove the document with the given key
+setDocs({ docs })             // Replace all documents, create keys if not provided
 ````
 
 ## Demo App
