@@ -54,6 +54,23 @@ const {
 ### Collection
 
 ````js
+const {
+  documents,            // sdadasd
+  addDoc({ doc }),      // sdajkljasd
+  updateDoc({ doc })    // sadjklasjd
+} = useCollection({
+  localStorageKey       // asdjkalsdj
+})
+
+// Methods
+
+// State
+
+````
+
+### Collection
+
+````js
 // Options
 localStorageKey      // asdjkalsdj
 
