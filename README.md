@@ -44,13 +44,6 @@ const {
 } = useHelloWorld()
 ````
 
-#### Example
-
-````js
-// Logs "Hello Nobody" to the console
-greet({ name: 'Nobody' })
-````
-
 ### Collection
 
 ````js
