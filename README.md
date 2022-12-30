@@ -53,6 +53,20 @@ const {
 
 ### Collection
 
+````js
+// Options
+localStorageKey      // asdjkalsdj
+
+// Methods
+addDoc({ doc })      // sdajkljasd
+updateDoc({ doc })   // sadjklasjd
+
+// State
+documents            // sdadasd
+````
+
+### Collection
+
 Options
 
 ````js
