@@ -1,7 +1,10 @@
 <template>
   <f7-page>
     <f7-navbar title="Type" back-link></f7-navbar>
-    <f7-list>
+    <f7-block inset>
+      Selected Value: <strong>{{ getType({ value: selectedValue }) }}</strong>
+    </f7-block>
+    <f7-list inset>
       <f7-list-item
         v-for="value in values"
         :title="value.title"  
@@ -12,9 +15,6 @@
         :checked="getType({ value: selectedValue }) === getType({ value: value.value })"
         />
     </f7-list>
-    <f7-block>
-      Selected Value: <strong>{{ getType({ value: selectedValue }) }}</strong>
-    </f7-block>
   </f7-page>
 </template>
 <script setup>

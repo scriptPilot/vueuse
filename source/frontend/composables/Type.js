@@ -1,6 +1,5 @@
 export function useType () {
-
-  function getType(options) {
+  function getType (options) {
     let value
     try {
       value = options.value !== undefined ? options.value : undefined
@@ -22,5 +21,4 @@ export function useType () {
   return {
     getType
   }
-
 }

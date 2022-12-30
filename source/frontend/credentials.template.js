@@ -1,11 +1,11 @@
 const dev = {
   googleClientId: 'devClientId',
-  googleSecret: 'devSecret'
+  googleClientSecret: 'devSecret'
 }
 
 const prod = {
   googleClientId: 'prodClientId',
-  googleSecret: 'prodSecret'
+  googleClientSecret: 'prodSecret'
 }
 
 export default import.meta.env.DEV ? dev : prod

@@ -32,15 +32,6 @@ Objects are used to make the composables and functions parameters more explicit,
 
 ## Composables
 
-### HelloWorld
-
-Greet the world.
-
-````js
-// Methods
-greet({ name })   // Log "Hello {name}" to the console or "Hello User" by default
-````
-
 ### Type
 
 Identify the type of anything.
@@ -105,7 +96,7 @@ getCollection({ path })              // Returns promise, reoslves with record ar
 
 ### MySQLCollection
 
-Collection with automatic synchronization with the [PHP CRUD API](https://github.com/mevdschee/php-crud-api).
+Collection with automatic synchronization with a MySQL table based on the [PHP CRUD API](https://github.com/mevdschee/php-crud-api).
 
 ````js
 // Options
@@ -128,6 +119,34 @@ stopSync()                    // Stop automatic synchronization
 
 // State
 documents                     // Read-only reactive array with all documents of the collection
+````
+
+Requires a MySQL table with some additional fields.
+
+````sql
+`$key` varchar(36) NOT NULL,
+`$updated` bigint(14) NOT NULL, 
+`$synchronized` bigint(14) NOT NULL, 
+`$deleted` tinyint(1) NOT NULL DEFAULT 0,
+````
+
+### Google Auth
+
+Sign-in users via Google and use the access token for API requests.
+
+````js
+// Options
+clientId       // Google OAuth Client ID
+clientSecret   // Google OAuth Client Secret
+redirectUrl    // Redirection URL, optional, website origin by default
+scope          // Scope as string or array
+
+// Methods
+signIn()       // Sign-in user to Google via redirect
+signOut()      // Sign-out user from Google
+
+// State
+token          // Readonly, reactive access token, automatically refreshed
 ````
 
 ## Demo App

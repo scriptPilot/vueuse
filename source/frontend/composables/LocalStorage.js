@@ -21,7 +21,9 @@ function writeToLocalStorage (localStorageKey, value) {
   }
 }
 
-export function useLocalStorage ({ localStorageKey, defaultValue = null }) {
+export function useLocalStorage (options) {
+  options = options || {}
+  const { localStorageKey, defaultValue = null } = options
 
   let state
 
@@ -33,19 +35,17 @@ export function useLocalStorage ({ localStorageKey, defaultValue = null }) {
     } else {
       state = reactive({ ...defaultValue })
     }
-  }
-  
-  else if (getType({ value: defaultValue }) === 'array') {
+  } else if (getType({ value: defaultValue }) === 'array') {
     state = getType({ value: localStorageValue }) === 'array'
-      ? reactive([...localStorageValue]) : reactive([...defaultValue])
-  }
-
-  else {
+      ? reactive([...localStorageValue])
+      : reactive([...defaultValue])
+  } else {
     state = getType({ value: defaultValue }) === getType({ value: localStorageValue })
-      ? ref(localStorageValue) : ref(defaultValue)
+      ? ref(localStorageValue)
+      : ref(defaultValue)
   }
 
-  function reset() {
+  function reset () {
     if (getType({ value: defaultValue }) === 'object') {
       Object.keys(state.value).forEach(key => {
         state[key] = defaultValue[key]
@@ -65,5 +65,4 @@ export function useLocalStorage ({ localStorageKey, defaultValue = null }) {
     state,
     reset
   }
-
 }

@@ -1,8 +1,10 @@
-import { reactive } from 'vue'
+import { reactive, readonly } from 'vue'
 import { useLocalStorage } from './LocalStorage'
 import { v4 as uuid } from 'uuid'
 
-export function useCollection ({ localStorageKey = null, primaryKey = '$key' }) {
+export function useCollection (options) {
+  options = options || {}
+  const { localStorageKey = null, primaryKey = '$key' } = options
 
   let docs
 

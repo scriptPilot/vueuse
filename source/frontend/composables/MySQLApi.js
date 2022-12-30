@@ -1,25 +1,7 @@
-/*
+export function useMySQLAPI (apiUrl) {
+  apiUrl = apiUrl || import.meta.env.DEV ? 'http://localhost:8000/api.php' : '/api.php'
 
-  Purpose: MySQL API Wrapper (api.php - https://github.com/mevdschee/php-crud-api)
-  Option:
-  - apiUrl (api.php endpoint, e.g. import.meta.env.DEV ? 'http://localhost:8000/api.php' : '/api.php')
-  Methods:
-  - isAvailable() => boolean
-  - apiRequest(path, method = GET, data = undefined) => Promise => json
-  - createDoc(collection, doc) => Promise => id
-  - updateDoc(collection, id, doc) => Promise => id
-  - deleteDoc(collection, id) => Promise => id
-  - getDoc(collection, id) => Promise => doc
-  - getCollection(path) => Promise => docs
-
-*/
-
-export function useMySQLAPI (apiUrl = '/api.php') {
-  function isAvailable () {
-    return navigator.onLine
-  }
-
-  function apiRequest (path, method = 'GET', data = undefined) {
+  function apiRequest ({ path, method = 'GET', data = undefined }) {
     return new Promise((resolve, reject) => {
       fetch(apiUrl + '/records/' + path, { method, body: JSON.stringify(data) })
         .then(response => {
@@ -46,11 +28,15 @@ export function useMySQLAPI (apiUrl = '/api.php') {
     })
   }
 
-  function createDoc (collection, doc) {
+  function isAvailable () {
+    return navigator.onLine
+  }
+
+  function createDoc ({ table, doc }) {
     return new Promise((resolve, reject) => {
-      apiRequest(collection, 'POST', doc)
-        .then(id => {
-          resolve(id)
+      apiRequest({ path: table, method: 'POST', data: doc })
+        .then(key => {
+          resolve(key)
         })
         .catch(error => {
           reject(error)
@@ -58,14 +44,14 @@ export function useMySQLAPI (apiUrl = '/api.php') {
     })
   }
 
-  function updateDoc (collection, id, doc) {
+  function updateDoc ({ table, key, updates }) {
     return new Promise((resolve, reject) => {
-      apiRequest(collection + '/' + id, 'PUT', doc)
+      apiRequest({ path: table + '/' + key, method: 'PUT', data: updates })
         .then(updatedRows => {
-          if (updatedRows === 1) {
-            resolve(id)
+          if (parseInt(updatedRows) === 1) {
+            resolve(key)
           } else {
-            reject(updatedRows)
+            reject(new Error('Multiple rows updated.'))
           }
         })
         .catch(error => {
@@ -74,14 +60,14 @@ export function useMySQLAPI (apiUrl = '/api.php') {
     })
   }
 
-  function deleteDoc (collection, id) {
+  function deleteDoc ({ table, key }) {
     return new Promise((resolve, reject) => {
-      apiRequest(collection + '/' + id, 'DELETE')
+      apiRequest({ path: table + '/' + key, method: 'DELETE' })
         .then(deletedRows => {
-          if (deletedRows === 1) {
-            resolve(id)
+          if (parseInt(deletedRows) === 1) {
+            resolve(key)
           } else {
-            reject(deletedRows)
+            reject(new Error('Multiple rows deleted.'))
           }
         })
         .catch(error => {
@@ -90,9 +76,9 @@ export function useMySQLAPI (apiUrl = '/api.php') {
     })
   }
 
-  function getDoc (collection, id) {
+  function getDoc ({ table, key }) {
     return new Promise((resolve, reject) => {
-      apiRequest(collection + '/' + id)
+      apiRequest({ path: table + '/' + key })
         .then(remoteDoc => {
           resolve(remoteDoc)
         })
@@ -102,9 +88,9 @@ export function useMySQLAPI (apiUrl = '/api.php') {
     })
   }
 
-  function getCollection (path) {
+  function getCollection ({ path }) {
     return new Promise((resolve, reject) => {
-      apiRequest(path)
+      apiRequest({ path })
         .then(data => {
           resolve(data.records)
         })

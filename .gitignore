@@ -4,6 +4,9 @@
 # Node
 node_modules/
 
+# Vite
+build/
+
 # Credentials
 credentials.js
 credentials.php

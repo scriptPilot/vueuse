@@ -1,47 +1,34 @@
-/*
-  Purpose: Collection Model with MySQL Database Sync
-  Requirements:
-  - Composables: useMySQLAPI, useCollection
-  - Table Fields:
-    `$id` varchar(36) NOT NULL, (or any other $id or id field)
-    `$updated` bigint(14) NOT NULL,
-    `$synchronized` bigint(14) NOT NULL,
-    `$deleted` tinyint(1) NOT NULL DEFAULT 0,
-  Options: apiUrl, localStorageKey, syncTable, syncFilter, syncInterval, syncStatus
-  Getters: documents
-  Methods: addDoc(doc), updateDoc(doc, updates), removeDoc(doc), runSync, startSync, stopSync
-*/
-
 import { useCollection } from './Collection'
 import { useMySQLAPI } from './MySQLAPI'
 
 export function useMySQLCollection (options) {
   // Validate options
-  const { apiUrl, localStorageKey, syncTable, syncFilter, syncInterval, syncStatus } = options || {}
+  options = options || {}
+  const { apiUrl, localStorageKey, primaryKey = '$key', syncTable, syncFilter, syncInterval, syncStatus } = options
   if (!syncTable) throw new Error('"syncTable" option is missing.')
   // Use Collection
-  const collection = useCollection({ localStorageKey })
+  const collection = useCollection({ localStorageKey, primaryKey })
   // Use MySQL API
-  const api = useMySQLAPI(apiUrl)
+  const api = useMySQLAPI({ apiUrl })
   // Set internal values
   const interval = typeof syncInterval === 'number' ? syncInterval : 1000
   let isActive = typeof syncStatus === 'boolean' ? syncStatus : true
   let lastUpdate = 0
   // Redefine collection functions
-  function addDoc (doc) {
-    return collection.addDoc({ $updated: Date.now(), $synchronized: false, ...doc })
+  function addDoc ({ doc }) {
+    return collection.addDoc({ doc: { $updated: Date.now(), $synchronized: false, ...doc } })
   }
-  function updateDoc (doc, updates) {
-    return collection.updateDoc(doc, { $updated: Date.now(), $synchronized: false, ...updates })
+  function updateDoc ({ key, updates }) {
+    return collection.updateDoc({ key, updates: { $updated: Date.now(), $synchronized: false, ...updates } })
   }
-  function removeDoc (doc) {
-    return updateDoc(doc, { $deleted: Date.now() })
+  function removeDoc ({ key }) {
+    return updateDoc({ key, updates: { $deleted: Date.now() } })
   }
-  function realRemoveDoc (doc) {
-    return collection.removeDoc(doc)
+  function realRemoveDoc ({ key }) {
+    return collection.removeDoc({ key })
   }
-  function setDocs (docs) {
-    return collection.setDocs(docs)
+  function setDocs ({ docs }) {
+    return collection.setDocs({ docs })
   }
   async function runSync () {
     if (isActive) {
@@ -52,31 +39,31 @@ export function useMySQLCollection (options) {
         const now = Date.now()
         const updatedFilter = 'filter1=$updated,gt,' + lastUpdate + '&filter2=$synchronized,gt,' + lastUpdate
         const deletedFilter = lastUpdate === 0 ? '&filter=$deleted,eq,0' : ''
-        await api.getCollection(syncTable + '?' + (syncFilter ? syncFilter + '&' : '') + updatedFilter + deletedFilter)
+        await api.getCollection({ path: syncTable + '?' + (syncFilter ? syncFilter + '&' : '') + updatedFilter + deletedFilter })
           .then(remoteCollection => {
             // Create object with local updates
             const docUpdates = {}
             collection.documents.forEach(doc => {
-              docUpdates[doc.$id || doc.id] = doc.$updated
+              docUpdates[doc[primaryKey]] = doc.$updated
             })
             // Loop remote documents
             remoteCollection.forEach(doc => {
               // Remote document not found locally but deletion flag > skip
-              if (!docUpdates[doc.$id || doc.id] && doc.$deleted) {
+              if (!docUpdates[doc[primaryKey]] && doc.$deleted) {
                 console.debug('skipped remote', JSON.stringify(doc))
               // Remote document not found locally and no deletion flag > create
-              } else if (!docUpdates[doc.$id || doc.id] && !doc.$deleted) {
+              } else if (!docUpdates[doc[primaryKey]] && !doc.$deleted) {
                 const newDoc = { ...doc, $synchronized: Date.now() }
-                addDoc(newDoc)
+                addDoc({ doc: newDoc })
                 console.debug('created local', JSON.stringify(newDoc))
               // Remote update newer than local one but deletion flag > delete
-              } else if (doc.$updated > docUpdates[doc.$id || doc.id] && doc.$deleted) {
-                realRemoveDoc(doc)
+              } else if (doc.$updated > docUpdates[doc[primaryKey]] && doc.$deleted) {
+                realRemoveDoc({ key: doc[primaryKey] })
                 console.debug('deleted local', JSON.stringify(doc))
               // Remote update newer than local one > update
-              } else if (doc.$updated > docUpdates[doc.$id || doc.id]) {
+              } else if (doc.$updated > docUpdates[doc[primaryKey]]) {
                 const updatedDoc = { ...doc, $synchronized: Date.now() }
-                updateDoc(doc, updatedDoc)
+                updateDoc({ key: doc[primaryKey], updates: updatedDoc })
                 console.debug('updated local', JSON.stringify(updatedDoc))
               }
             })
@@ -89,15 +76,15 @@ export function useMySQLCollection (options) {
           if (!doc.$synchronized) {
             const remoteDoc = { ...doc, $synchronized: Date.now() }
             // Try update remote document first
-            await api.updateDoc(syncTable, doc.$id || doc.id, remoteDoc)
+            await api.updateDoc({ table: syncTable, key: doc[primaryKey], updates: remoteDoc })
               .then(() => {
                 console.debug('then')
                 // Remember successful sync
-                updateDoc(doc, { $updated: doc.$updated, $synchronized: Date.now() })
+                updateDoc({ key: doc[primaryKey], updates: { $updated: doc.$updated, $synchronized: Date.now() } })
                 console.debug('updated remote', JSON.stringify(remoteDoc))
                 // Delete locally after synchronization
                 if (doc.$deleted) {
-                  realRemoveDoc(doc)
+                  realRemoveDoc({ key: doc[primaryKey] })
                   console.debug('deleted local', JSON.stringify(doc))
                 }
               })
@@ -106,15 +93,15 @@ export function useMySQLCollection (options) {
                 // Create remote document (if no deletion flag is set)
                 if (!doc.$deleted) {
                   console.debug('createDoc', syncTable, remoteDoc)
-                  await api.createDoc(syncTable, remoteDoc)
+                  await api.createDoc({ table: syncTable, doc: remoteDoc })
                     .then(() => {
                       // Remember successful sync
-                      updateDoc(doc, { $updated: doc.$updated, $synchronized: Date.now() })
+                      updateDoc({ key: doc[primaryKey], updates: { $updated: doc.$updated, $synchronized: Date.now() } })
                       console.debug('created remote', JSON.stringify(remoteDoc))
                     })
                 } else {
                   // Delete doc locally
-                  realRemoveDoc(doc)
+                  realRemoveDoc({ key: doc[primaryKey] })
                   console.debug('deleted local', JSON.stringify(doc))
                 }
               })

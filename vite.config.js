@@ -16,6 +16,11 @@ export default {
   server: {
     open: true
   },
+  build: {
+    outDir: '../../build',
+    assetsDir: '.',
+    emptyOutDir: true
+  },
   plugins: [
     vue(),
     AutoImport({
