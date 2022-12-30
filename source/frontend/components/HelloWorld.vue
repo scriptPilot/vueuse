@@ -9,6 +9,6 @@
 </template>
 <script setup>
   import { useHelloWorld } from '../composables'
-  const name = ref('')
   const { greet } = useHelloWorld()
+  const name = ref()
 </script>

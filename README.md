@@ -38,7 +38,7 @@ Greet the world.
 
 ````js
 // Methods
-greet({ name = 'User' })   // Log "Hello {name}" to the console
+greet({ name = 'User' })   // Log "Hello {name}" to the console or "Hello User" by default
 ````
 
 ### Collection
@@ -48,7 +48,7 @@ Manage collections easily.
 ````js
 // Options
 localStorageKey = null        // Local Storage key to make the collection persistent
-primaryKey = '$id'            // Primary key which is used by all documents of the collection
+primaryKey = '$key'           // Primary key which is used by all documents of the collection
 
 // State
 documents                     // Reactive array with all documents of the collection
