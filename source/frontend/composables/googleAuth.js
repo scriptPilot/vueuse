@@ -1,21 +1,24 @@
+import { readonly } from 'vue'
 import { useLocalStorage } from './LocalStorage'
 
-export function useGoogleAuth({ clientId, clientSecret, redirectUrl, scope }) {
-  
-  const code = useLocalStorage('useGoogleAuth:code', null)
-  const exchangedCode = useLocalStorage('useGoogleAuth:exchangedCode', null)
-  const accessToken = useLocalStorage('useGoogleAuth:accessToken', null)
-  const refreshToken = useLocalStorage('useGoogleAuth:refreshToken', null)
+export function useGoogleAuth (options) {
+  options = options || {}
+  const { clientId, clientSecret, redirectUrl, scope } = options
 
-  function createUrl(endpoint, params = {}) {
+  const { state: code } = useLocalStorage({ localStorageKey: 'useGoogleAuth:code' })
+  const { state: exchangedCode } = useLocalStorage({ localStorageKey: 'useGoogleAuth:exchangedCode' })
+  const { state: accessToken } = useLocalStorage({ localStorageKey: 'useGoogleAuth:accessToken' })
+  const { state: refreshToken } = useLocalStorage({ localStorageKey: 'useGoogleAuth:refreshToken' })
+
+  function createUrl (endpoint, params = {}) {
     const url = new URL(endpoint)
     Object.keys(params).forEach(key => url.searchParams.set(key, params[key]))
     return url.href
   }
 
-  function signIn() {
+  function signIn () {
     return new Promise((resolve, reject) => {
-      if (navigator.onLine) {  
+      if (navigator.onLine) {
         const signInUrl = createUrl(
           'https://accounts.google.com/o/oauth2/v2/auth',
           {
@@ -30,20 +33,20 @@ export function useGoogleAuth({ clientId, clientSecret, redirectUrl, scope }) {
         window.location = signInUrl
         resolve()
       } else {
-        reject('Sign-in not possible when offline.')
+        reject(new Error('Sign-in not possible when offline.'))
       }
     })
   }
 
-  function handleReceivedCodeInUrl() {
+  function handleReceivedCodeInUrl () {
     const params = new URLSearchParams(window.location.search)
     if (params.has('code') && params.get('code') !== exchangedCode.value) {
-      code.value = params.get('code')   
-      exchangeCode()   
+      code.value = params.get('code')
+      exchangeCode()
     }
   }
 
-  function exchangeCode() {
+  function exchangeCode () {
     if (code.value !== exchangedCode.value) {
       const exchangeUrl = createUrl(
         'https://www.googleapis.com/oauth2/v4/token',
@@ -52,7 +55,7 @@ export function useGoogleAuth({ clientId, clientSecret, redirectUrl, scope }) {
           client_secret: clientSecret,
           redirect_uri: redirectUrl || window.location.origin,
           grant_type: 'authorization_code',
-          code: code.value,
+          code: code.value
         }
       )
       fetch(exchangeUrl, { method: 'POST' })
@@ -62,8 +65,8 @@ export function useGoogleAuth({ clientId, clientSecret, redirectUrl, scope }) {
               try {
                 const json = JSON.parse(text)
                 if (!json.access_token) console.error('No access token retrieved in exchange.')
-                if (!json.refresh_token) console.error('No refresh token retrieved in exchange.')            
-                if (!json.expires_in) console.error('No expiration retrieved in exchange.')            
+                if (!json.refresh_token) console.error('No refresh token retrieved in exchange.')
+                if (!json.expires_in) console.error('No expiration retrieved in exchange.')
                 accessToken.value = json.access_token
                 refreshToken.value = json.refresh_token
                 setTimeout(keepTokenRefreshed, json.expires_in * 1000 / 2)
@@ -84,42 +87,46 @@ export function useGoogleAuth({ clientId, clientSecret, redirectUrl, scope }) {
     }
   }
 
-  function keepTokenRefreshed() {
+  function keepTokenRefreshed () {
     if (refreshToken.value) {
-      const refreshUrl = createUrl(
-        'https://www.googleapis.com/oauth2/v4/token',
-        {
-          client_id: clientId,
-          client_secret: clientSecret,
-          grant_type: 'refresh_token',
-          refresh_token: refreshToken.value,
-        }
-      )
-      fetch(refreshUrl, { method: 'POST' })
-        .then(response => {
-          response.text()
-            .then(text => {
-              try {
-                const json = JSON.parse(text)
-                if (!json.access_token) console.error('No access token retrieved in refresh.')
-                if (!json.expires_in) console.error('No expiration retrieved in refresh.')            
-                accessToken.value = json.access_token
-                setTimeout(keepTokenRefreshed, json.expires_in * 1000 / 2)
-              } catch(error) {
-                console.error(error, text)
-              }
-            })
-            .catch(error => {
-              console.error(error)
-            })
-        })
-        .catch(error => {
-          console.error(error)
-        })    
+      if (navigator.onLine) {
+        const refreshUrl = createUrl(
+          'https://www.googleapis.com/oauth2/v4/token',
+          {
+            client_id: clientId,
+            client_secret: clientSecret,
+            grant_type: 'refresh_token',
+            refresh_token: refreshToken.value
+          }
+        )
+        fetch(refreshUrl, { method: 'POST' })
+          .then(response => {
+            response.text()
+              .then(text => {
+                try {
+                  const json = JSON.parse(text)
+                  if (!json.access_token) console.error('No access token retrieved in refresh.')
+                  if (!json.expires_in) console.error('No expiration retrieved in refresh.')
+                  accessToken.value = json.access_token
+                  setTimeout(keepTokenRefreshed, json.expires_in * 1000 / 2)
+                } catch (error) {
+                  console.error(error, text)
+                }
+              })
+              .catch(error => {
+                console.error(error)
+              })
+          })
+          .catch(error => {
+            console.error(error)
+          })
+      } else {
+        setTimeout(keepTokenRefreshed, 1000)
+      }
     }
   }
 
-  function signOut() {
+  function signOut () {
     accessToken.value = null
     refreshToken.value = null
   }
@@ -128,9 +135,8 @@ export function useGoogleAuth({ clientId, clientSecret, redirectUrl, scope }) {
   keepTokenRefreshed()
 
   return {
-    token: accessToken,
+    token: readonly(accessToken),
     signIn,
     signOut
   }
-
 }
