@@ -22,12 +22,22 @@
       <f7-list-button @click="array.push('New Element')">Add Element</f7-list-button>
       <f7-list-item v-for="title in array" :title="title"></f7-list-item>
     </f7-list>
+    <f7-block>
+      <f7-button color="red" @click="resetAll">Reset All</f7-button>
+    </f7-block>
   </f7-page>
 </template>
 <script setup>
   import { useLocalStorage } from '../composables'
-  const toggle = useLocalStorage('toggle', false)
-  const text = useLocalStorage('text', 'Initial text')
-  const boxes = useLocalStorage('boxes', { first: true, second: false, third: true })
-  const array = useLocalStorage('array', [])
+  const { state: toggle, reset: resetToggle } = useLocalStorage({ localStorageKey: 'toogle', defaultValue: true })
+  const { state: text, reset: resetText } = useLocalStorage({ localStorageKey: 'text', defaultValue: 'Initial Text' })
+  const { state: boxes, reset: resetBoxes } = useLocalStorage({ localStorageKey: 'boxes', defaultValue: { first: true, second: false, third: true } })
+  const { state: array, reset: resetArray } = useLocalStorage({ localStorageKey: 'array', defaultValue: [] })
+  function resetAll() {
+    console.log('reset')
+    resetToggle()
+    resetText()
+    resetBoxes()
+    resetArray()
+  }
 </script>

@@ -1,9 +1,3 @@
-/*
-
-  Purpose: Return type of the value
-
-*/
-
 export function useType () {
 
   function getType(options) {

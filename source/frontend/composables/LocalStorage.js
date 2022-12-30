@@ -1,11 +1,7 @@
-/*
-
-  Purpose: Create reactive and persistent local storage object
-
-*/
-
 import { useType } from './Type'
 import { reactive, ref, watch } from 'vue'
+
+const { getType } = useType()
 
 function readFromLocalStorage (localStorageKey) {
   try {
@@ -25,32 +21,49 @@ function writeToLocalStorage (localStorageKey, value) {
   }
 }
 
-export function useLocalStorage (localStorageKey, defaults = null) {
-  let value
+export function useLocalStorage ({ localStorageKey, defaultValue = null }) {
+
+  let state
 
   const localStorageValue = readFromLocalStorage(localStorageKey)
 
-  if (useType(defaults) === 'object') {
-    if (useType(localStorageValue) === 'object') {
-      value = reactive({ ...defaults, ...localStorageValue })
+  if (getType({ value: defaultValue }) === 'object') {
+    if (getType({ value: localStorageValue }) === 'object') {
+      state = reactive({ ...defaultValue, ...localStorageValue })
     } else {
-      value = reactive(defaults)
+      state = reactive({ ...defaultValue })
     }
-  } else if (defaults !== null) {
-    if (useType(defaults) === useType(localStorageValue)) {
-      value = useType(localStorageValue) === 'array'
-        ? reactive(localStorageValue)
-        : ref(localStorageValue)
-    } else {
-      value = useType(defaults) === 'array' ? reactive(defaults) : ref(defaults)
-    }
-  } else {
-    value = ref(localStorageValue)
+  }
+  
+  else if (getType({ value: defaultValue }) === 'array') {
+    state = getType({ value: localStorageValue }) === 'array'
+      ? reactive([...localStorageValue]) : reactive([...defaultValue])
   }
 
-  watch(value, newValue => {
+  else {
+    state = getType({ value: defaultValue }) === getType({ value: localStorageValue })
+      ? ref(localStorageValue) : ref(defaultValue)
+  }
+
+  function reset() {
+    if (getType({ value: defaultValue }) === 'object') {
+      Object.keys(state.value).forEach(key => {
+        state[key] = defaultValue[key]
+      })
+    } else if (getType({ value: defaultValue }) === 'array') {
+      state.splice(0, state.length, ...defaultValue)
+    } else {
+      state.value = defaultValue
+    }
+  }
+
+  watch(state, newValue => {
     writeToLocalStorage(localStorageKey, newValue)
   })
 
-  return value
+  return {
+    state,
+    reset
+  }
+
 }

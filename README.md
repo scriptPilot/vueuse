@@ -52,7 +52,7 @@ getType({ value })   // Returns the type of the given value as a string
 
 ### LocalStorage
 
-Create a persistent reactive state.
+Create a persistent reactive state for any value type.
 
 ````js
 // Options
