@@ -91,7 +91,7 @@ createDoc({ table, doc })            // Returns promise, resolves with record ke
 updateDoc({ table, key, updates })   // Returns promise, resolves with record key
 deleteDoc({ table, key })            // Returns promise, resolves with record key
 getDoc({ table, key })               // Returns promise, resolves with record
-getCollection({ path })              // Returns promise, reoslves with record array
+getCollection({ path })              // Returns promise, resolves with record array
 ````
 
 ### MySQLCollection
