@@ -82,7 +82,7 @@ MySQL API Wrapper for the [PHP CRUD API](https://github.com/mevdschee/php-crud-a
 
 ````js
 // Options
-apiUrl                               // API endpoint, /api.php file by default 
+apiUrl                               // API endpoint, defaults: http://localhost:8000/api.php in dev, /api.php in prod
 
 // Methods
 isAvailable()                        // Returns true if API is available or false if not
