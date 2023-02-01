@@ -92,6 +92,7 @@ updateDoc({ table, key, updates })   // Returns promise, resolves with record ke
 deleteDoc({ table, key })            // Returns promise, resolves with record key
 getDoc({ table, key })               // Returns promise, resolves with record
 getCollection({ path })              // Returns promise, resolves with record array
+uuid()                               // Returns a new UUID v4 string
 ````
 
 ### MySQLCollection

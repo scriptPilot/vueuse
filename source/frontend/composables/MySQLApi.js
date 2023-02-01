@@ -1,3 +1,5 @@
+import { v4 as uuid }  from 'uuid'
+
 export function useMySQLAPI (apiUrl) {
   apiUrl = apiUrl || import.meta.env.DEV ? 'http://localhost:8000/api.php' : '/api.php'
 
@@ -107,6 +109,7 @@ export function useMySQLAPI (apiUrl) {
     updateDoc,
     deleteDoc,
     getDoc,
-    getCollection
+    getCollection,
+    uuid
   }
 }
