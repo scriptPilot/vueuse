@@ -30,6 +30,20 @@ console.log(composable.state.value)
 
 Objects are used to make the composables and functions parameters more explicit, flexible and to allow backward-compatibility if new parameters are added in the future.
 
+## Demo App
+
+To test the composables locally and review code samples:
+
+1. Install Docker and Node.js
+2. Clone this repository and run `npm install`
+4. Run `npm run dev` to start the Demo App
+
+To use the Google-related composables:
+
+1. Create a Google Cloud project 
+2. Activate the Drive API and create an OAuth client
+3. Modify and save the credentials.template.js file as credentials.js
+
 ## Composables
 
 ### Type
@@ -149,17 +163,3 @@ signOut()      // Sign-out user from Google
 // State
 token          // Readonly, reactive access token, automatically refreshed
 ````
-
-## Demo App
-
-To test the composables locally and review code samples:
-
-1. Install Docker and Node.js
-2. Clone this repository and run `npm install`
-4. Run `npm run dev` to start the Demo App
-
-To use the Google-related composables:
-
-1. Create a Google Cloud project 
-2. Activate the Drive API and create an OAuth client
-3. Modify and save the credentials.template.js file as credentials.js
