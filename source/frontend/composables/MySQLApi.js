@@ -2,8 +2,8 @@ import { v4 as uuid }  from 'uuid'
 
 export function useMySQLAPI (options) {
 
-  options = options || {}  
-  const apiUrl = options.apiUrl || import.meta.env.DEV ? 'http://localhost:8000/api.php' : '/api.php'
+  options = options || {} 
+  const apiUrl = options.apiUrl || (import.meta.env.DEV ? 'http://localhost:8000/api.php' : '/api.php')
 
   function apiRequest ({ path, method = 'GET', data = undefined }) {
     return new Promise((resolve, reject) => {
